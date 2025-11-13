@@ -10,6 +10,7 @@ BG_ORIGINAL = pygame.image.load("background.jpg")
 BG = pygame.transform.smoothscale(BG_ORIGINAL, (WIDTH, HEIGHT))
 
 PLAYER_WIDTH, PLAYER_HEIGHT = 40, 60
+PLAYER_VEL = 5
 
 def draw_window(player):
     WIN.blit(BG, (0, 0))
@@ -21,8 +22,11 @@ def main():
     run = True
 
     player = pygame.Rect(WIDTH//2, HEIGHT - PLAYER_HEIGHT - 10, PLAYER_WIDTH, PLAYER_HEIGHT)
+    clock = pygame.time.Clock()
 
     while run:
+        clock.tick(60)
+
         draw_window(player)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -32,6 +36,11 @@ def main():
                 WIDTH, HEIGHT = event.w, event.h
                 WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
                 BG = pygame.transform.smoothscale(BG_ORIGINAL, (WIDTH, HEIGHT))
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and player.x - PLAYER_VEL > 0:
+            player.x -= PLAYER_VEL
+        if keys[pygame.K_RIGHT] and player.x + PLAYER_VEL + PLAYER_WIDTH < WIDTH:
+            player.x += PLAYER_VEL
     
     pygame.quit()
 
